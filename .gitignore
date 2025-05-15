@@ -1,0 +1,5 @@
+.vscode
+*.txt
+inverted_index
+inverted_index_p
+new.py
