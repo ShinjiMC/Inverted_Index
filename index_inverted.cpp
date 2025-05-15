@@ -112,15 +112,13 @@ void writeIndexToFile(const std::unordered_map<std::string, std::unordered_set<s
 
 int main(int argc, char *argv[])
 {
-    using namespace std::chrono;
-
     if (argc < 2)
     {
         std::cerr << "Uso: " << argv[0] << " archivo1.txt archivo2.txt ...\n";
         return 1;
     }
 
-    auto start_total = high_resolution_clock::now();
+    auto start_total = std::chrono::high_resolution_clock::now();
 
     std::vector<std::string> files(argv + 1, argv + argc);
     std::unordered_map<std::string, std::unordered_set<std::string>> invertedIndex;
@@ -131,9 +129,9 @@ int main(int argc, char *argv[])
     std::filesystem::remove(finalFile);
     std::cout << "Escribiendo índice en '" << finalFile << "'...\n";
     writeIndexToFile(invertedIndex, finalFile);
-    auto end_total = high_resolution_clock::now();
+    auto end_total = std::chrono::high_resolution_clock::now();
     std::cout << "Tiempo total de ejecución:\t"
-              << duration_cast<milliseconds>(end_total - start_total).count() / 1000.0
+              << std::chrono::duration_cast<std::chrono::milliseconds>(end_total - start_total).count() / 1000.0
               << " segundos\n";
     return 0;
 }
