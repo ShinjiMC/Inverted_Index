@@ -728,25 +728,23 @@ g++ -fopenmp -O3 -o inverted_index_p index_inverted_parallel.cpp
 
 ## Conclusiones
 
-La paralelización de la construcción del índice invertido utilizando OpenMP demuestra una mejora notable en el rendimiento con respecto a la versión secuencial. Al aplicar procesamiento paralelo por bloques sobre múltiples archivos, el tiempo total de ejecución se reduce de forma significativa, incluso al trabajar con volúmenes de datos textuales muy grandes. Esto resulta clave para tareas de análisis textual a gran escala, como recuperación de información, motores de búsqueda o minería de texto. A continuación, se presentan los tiempos obtenidos en distintas pruebas experimentales:
+La paralelización de la construcción del índice invertido utilizando OpenMP demuestra una mejora clara en el rendimiento con respecto a la versión secuencial. Al aplicar procesamiento paralelo por bloques sobre múltiples archivos, se logra una reducción significativa en el tiempo de ejecución, especialmente en archivos de gran tamaño. Esta mejora es especialmente relevante para tareas de análisis textual a gran escala, como motores de búsqueda, minería de texto o recuperación de información. A continuación, se presentan los tiempos obtenidos en distintas pruebas experimentales:
 
 | **Peso total de los archivos** | **Índice Invertido Secuencial** | **Índice Invertido Paralelo** |
 | ------------------------------ | ------------------------------- | ----------------------------- |
-| 4 GB                           | 25.318 s                        | 5.002 s                       |
-| 8 GB                           | 50.672 s                        | 9.761 s                       |
-| 12 GB                          | 75.899 s                        | 14.324 s                      |
-| 16 GB                          | 101.507 s                       | 18.782 s                      |
-| 20 GB                          | 126.870 s                       | 23.051 s                      |
+| 4 GB                           | 39.734 s                        | 26.5069 s                     |
+| 8 GB                           | 78.324 s                        | 27.9854 s                     |
+| 12 GB                          | 118.089 s                       | 28.6838 s                     |
+| 16 GB                          | 157.597 s                       | 29.0275 s                     |
+| 20 GB                          | 194.459 s                       | 29.9805 s                     |
 
 Esta mejora de rendimiento se explica por los siguientes factores clave:
 
-- **Reducción del tiempo de ejecución**: Al dividir cada archivo en bloques de tamaño fijo y procesarlos de manera simultánea mediante múltiples hilos, se explotan eficientemente todos los núcleos del procesador, logrando reducir el tiempo de ejecución en más del 80% respecto a la versión secuencial.
+- **Reducción significativa del tiempo de ejecución**: Aunque los tiempos paralelos se estabilizan a partir de cierto tamaño de archivo (alrededor de 12 GB en adelante), el enfoque paralelo mantiene un rendimiento casi constante, mientras que la versión secuencial escala linealmente en tiempo. Esto evidencia una alta eficiencia en el uso de múltiples núcleos.
 
-- **Mayor eficiencia computacional**: Gracias a que cada hilo trabaja sobre su propio bloque y mantiene un índice local, se evita la contención de recursos y se reduce significativamente la espera por acceso a disco. Posteriormente, los índices se combinan de forma eficiente, manteniendo la coherencia de los datos.
+- **Uso eficiente de los recursos computacionales**: Al dividir los archivos en bloques y asignarlos a hilos independientes, se minimiza la sobrecarga de lectura secuencial y se reduce el tiempo de espera por acceso al disco. Además, el uso de estructuras locales por hilo evita colisiones o bloqueos durante el procesamiento.
 
-- **Escalabilidad**: La solución paralela no solo mejora el rendimiento actual, sino que permite procesar archivos aún más grandes o conjuntos de documentos más numerosos simplemente aumentando la cantidad de hilos disponibles, haciendo que el enfoque sea escalable a nivel de infraestructura.
-
-En conjunto, este enfoque de paralelización convierte la tarea de construir un índice invertido, tradicionalmente costosa en tiempo, en una operación viable y eficiente incluso para volúmenes masivos de datos textuales.
+- **Escalabilidad efectiva**: La solución paralela demuestra ser escalable horizontalmente. A medida que se incrementa el volumen de datos, el tiempo de procesamiento paralelo se mantiene estable, lo que indica que el sistema es capaz de manejar cargas de trabajo mayores sin un aumento proporcional del tiempo de ejecución.
 
 ## Author
 
